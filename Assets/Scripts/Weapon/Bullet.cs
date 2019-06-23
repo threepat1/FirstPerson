@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
 
   private Rigidbody rigid;
 
+
   void Awake()
   {
     // Get component on awake so we don't miss it if it starts disabled
@@ -25,6 +26,7 @@ public class Bullet : MonoBehaviour
       // Rotate the line to face direction of bullet travel
       line.transform.rotation = Quaternion.LookRotation(rigid.velocity);
     }
+
   }
 
   void OnCollisionEnter(Collision col)
@@ -34,6 +36,7 @@ public class Bullet : MonoBehaviour
     // Spawn the Effect (i.e, Bullet Hole / Sparks)
     //Instantiate(effectsPrefab, contact.point, Quaternion.LookRotation(contact.normal));
     Enemy enemy = col.collider.GetComponent<Enemy>();
+
     if (enemy)
     {
       enemy.TakeDamage(damage);
@@ -50,4 +53,5 @@ public class Bullet : MonoBehaviour
     // Set the line's origin (different from the bullet's starting position)
     line.transform.position = lineOrigin;
   }
+
 }

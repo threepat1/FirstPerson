@@ -4,68 +4,70 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  public float runSpeed = 8f;
-  public float walkSpeed = 6f;
-  public float gravity = -10f;
-  public float jumpHeight = 15f;
+    public float runSpeed = 8f;
+    public float walkSpeed = 6f;
+    public float gravity = -10f;
+    public float jumpHeight = 15f;
 
-  private CharacterController controller;
-  private Vector3 motion;
-  private Vector3 velocity;
+    private CharacterController controller;
+    private Vector3 motion;
+    private Vector3 velocity;
 
-  // Start is called before the first frame update
-  void Start()
-  {
-    controller = GetComponent<CharacterController>();
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    float inputH = Input.GetAxis("Horizontal");
-    float inputV = Input.GetAxis("Vertical");
-
-    // If Is Grounded AND is NOT jumping
-    if (controller.isGrounded)
+    // Start is called before the first frame update
+    void Start()
     {
-      velocity -= motion;
-
-      Vector3 normalized = new Vector3(inputH, 0f, inputV);
-      normalized.Normalize();
-      Move(normalized.x, normalized.z);
-
-      velocity += motion;
-
-      velocity.y = gravity * Time.deltaTime;
+        controller = GetComponent<CharacterController>();
     }
 
-    velocity += Vector3.up * gravity * Time.deltaTime;
+    // Update is called once per frame
+    void Update()
+    {
+        float inputH = Input.GetAxis("Horizontal");
+        float inputV = Input.GetAxis("Vertical");
 
-    // Applies motion to CharacterController
-    controller.Move(velocity * Time.deltaTime);
+        // If Is Grounded AND is NOT jumping
+        if (controller.isGrounded)
+        {
+            velocity -= motion;
+
+            Vector3 normalized = new Vector3(inputH, 0f, inputV);
+            normalized.Normalize();
+            Move(normalized.x, normalized.z);
+
+            velocity += motion;
+
+            velocity.y = gravity * Time.deltaTime;
+        }
+
+        velocity += Vector3.up * gravity * Time.deltaTime;
+
+        // Applies motion to CharacterController
+        controller.Move(velocity * Time.deltaTime);
+  
   }
 
-  // Move the Player Characer in the direction we give it (horizontal / vertical)
-  public void Move(float horizontal, float vertical)
-  {
-    Vector3 direction = new Vector3(horizontal, 0f, vertical);
+    // Move the Player Characer in the direction we give it (horizontal / vertical)
+    public void Move(float horizontal, float vertical)
+    {
+        Vector3 direction = new Vector3(horizontal, 0f, vertical);
 
-    // Convert local direction to world space
-    direction = transform.TransformDirection(direction);
+        // Convert local direction to world space
+        direction = transform.TransformDirection(direction);
 
-    motion.x = direction.x * walkSpeed;
-    motion.z = direction.z * walkSpeed;
-  }
+        motion.x = direction.x * walkSpeed;
+        motion.z = direction.z * walkSpeed;
+    }
 
-  // Makes the player jump when called
-  public void Jump(float height)
-  {
-    motion.y = height;
-  }
+    // Makes the player jump when called
+    public void Jump(float height)
+    {
+        motion.y = height;
+    }
 
-  public void Bounce(Transform reference)
-  {
-    motion = Vector3.zero;
-    velocity = reference.up * jumpHeight;
-  }
+    public void Bounce(Transform reference)
+    {
+        motion = Vector3.zero;
+        velocity = reference.up * jumpHeight;
+    }
+
 }
